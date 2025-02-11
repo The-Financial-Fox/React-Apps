@@ -1,0 +1,615 @@
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  PieChart,
+  Pie,
+  Cell,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  RadialBarChart,
+  RadialBar,
+  AreaChart,
+  Area,
+  ComposedChart,
+  Line,
+  ScatterChart,
+  Scatter,
+  Treemap,
+  Funnel,
+  FunnelChart,
+  LabelList,
+  Sankey,
+  ResponsiveContainer
+} from "recharts";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+// Example data sets
+const dataBar = [
+  { name: "Jan", value: 400 },
+  { name: "Feb", value: 300 },
+  { name: "Mar", value: 200 },
+  { name: "Apr", value: 278 },
+  { name: "May", value: 189 },
+];
+
+const dataBarStack = [
+  { name: "Jan", uv: 400, pv: 240 },
+  { name: "Feb", uv: 300, pv: 139 },
+  { name: "Mar", uv: 200, pv: 980 },
+  { name: "Apr", uv: 278, pv: 390 },
+  { name: "May", uv: 189, pv: 480 },
+];
+
+const dataPie = [
+  { name: "Group A", value: 400 },
+  { name: "Group B", value: 300 },
+  { name: "Group C", value: 300 },
+  { name: "Group D", value: 200 },
+];
+
+const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#d0ed57"];
+
+const dataRadar = [
+  { subject: "Revenue", A: 120, B: 110, fullMark: 150 },
+  { subject: "COGS", A: 98, B: 130, fullMark: 150 },
+  { subject: "Profit", A: 86, B: 130, fullMark: 150 },
+  { subject: "Opex", A: 99, B: 100, fullMark: 150 },
+  { subject: "Cash Flow", A: 85, B: 90, fullMark: 150 },
+];
+
+const dataRadialBar = [
+  { name: "Jan", uv: 31, fill: "#8884d8" },
+  { name: "Feb", uv: 40, fill: "#83a6ed" },
+  { name: "Mar", uv: 28, fill: "#8dd1e1" },
+  { name: "Apr", uv: 20, fill: "#82ca9d" },
+  { name: "May", uv: 27, fill: "#a4de6c" },
+];
+
+const dataArea = [
+  { name: "Jan", uv: 400, pv: 240, amt: 240 },
+  { name: "Feb", uv: 300, pv: 456, amt: 240 },
+  { name: "Mar", uv: 300, pv: 139, amt: 221 },
+  { name: "Apr", uv: 200, pv: 980, amt: 229 },
+  { name: "May", uv: 278, pv: 390, amt: 200 },
+];
+
+const dataComposed = [
+  { name: "Jan", uv: 590, pv: 800, amt: 1400, cnt: 490 },
+  { name: "Feb", uv: 868, pv: 967, amt: 1506, cnt: 590 },
+  { name: "Mar", uv: 1397, pv: 1098, amt: 989, cnt: 350 },
+  { name: "Apr", uv: 1480, pv: 1200, amt: 1228, cnt: 480 },
+  { name: "May", uv: 1520, pv: 1108, amt: 1100, cnt: 460 },
+];
+
+const dataScatter = [
+  { x: 100, y: 200, z: 200 },
+  { x: 120, y: 100, z: 260 },
+  { x: 170, y: 300, z: 400 },
+  { x: 140, y: 250, z: 280 },
+  { x: 150, y: 400, z: 500 },
+];
+
+const dataTree = [
+  {
+    name: "root",
+    children: [
+      {
+        name: "Branch1",
+        size: 100,
+        children: [
+          { name: "Leaf1", size: 30 },
+          { name: "Leaf2", size: 70 },
+        ],
+      },
+      {
+        name: "Branch2",
+        size: 60,
+      },
+    ],
+  },
+];
+
+const dataFunnel = [
+  {
+    value: 100,
+    name: "Prospects",
+  },
+  {
+    value: 80,
+    name: "Qualified",
+  },
+  {
+    value: 50,
+    name: "Proposal",
+  },
+  {
+    value: 30,
+    name: "Negotiation",
+  },
+  {
+    value: 20,
+    name: "Closed",
+  },
+];
+
+// Minimal Sankey example
+const dataSankey = {
+  nodes: [
+    { name: "Source A" },
+    { name: "Source B" },
+    { name: "Target X" },
+    { name: "Target Y" },
+  ],
+  links: [
+    { source: 0, target: 2, value: 10 },
+    { source: 1, target: 3, value: 15 },
+  ],
+};
+
+const dataLine = [
+  { name: "Jan", uv: 400, pv: 2400, amt: 2400 },
+  { name: "Feb", uv: 300, pv: 2400, amt: 2400 },
+  { name: "Mar", uv: 200, pv: 2400, amt: 2400 },
+  { name: "Apr", uv: 278, pv: 2400, amt: 2400 },
+  { name: "May", uv: 189, pv: 2400, amt: 2400 },
+];
+
+// We will define additional data sets for stacked area, etc.
+const dataStackedArea = [
+  {
+    name: "Jan",
+    uv: 4000,
+    pv: 2400,
+  },
+  {
+    name: "Feb",
+    uv: 3000,
+    pv: 1398,
+  },
+  {
+    name: "Mar",
+    uv: 2000,
+    pv: 9800,
+  },
+  {
+    name: "Apr",
+    uv: 2780,
+    pv: 3908,
+  },
+  {
+    name: "May",
+    uv: 1890,
+    pv: 4800,
+  },
+];
+
+const dataStackedBar2 = [
+  { name: "Jan", uv: 300, pv: 456, amt: 140 },
+  { name: "Feb", uv: 200, pv: 200, amt: 98 },
+  { name: "Mar", uv: 278, pv: 390, amt: 200 },
+  { name: "Apr", uv: 189, pv: 480, amt: 218 },
+  { name: "May", uv: 239, pv: 380, amt: 250 },
+];
+
+export default function FPnADataVizShowcase() {
+  return (
+    <div className="p-4">
+      <motion.h1
+        className="text-2xl font-bold mb-4"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        FP&A Data Visualization Showcase
+      </motion.h1>
+      <p className="mb-8 text-sm text-gray-600">
+        Demonstrating 20 different chart types and best practices for effective FP&A.
+        Keep visuals simple, focus on trends and comparisons, use consistent color schemes,
+        and highlight key insights.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+        {/* 1. Simple Bar Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Simple Bar</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={dataBar}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="value" fill="#8884d8" barSize={30} />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 2. Stacked Bar Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Stacked Bar</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={dataBarStack}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="uv" stackId="a" fill="#8884d8" />
+                <Bar dataKey="pv" stackId="a" fill="#82ca9d" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 3. Simple Pie Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Pie Chart</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={dataPie}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={60}
+                  fill="#8884d8"
+                  label
+                >
+                  {dataPie.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 4. Radar Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Radar Chart</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <RadarChart data={dataRadar}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="subject" />
+                <PolarRadiusAxis angle={30} domain={[0, 150]} />
+                <Radar name="A" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                <Radar name="B" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
+                <Legend />
+              </RadarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 5. Radial Bar Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Radial Bar</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <RadialBarChart
+                cx="50%"
+                cy="50%"
+                innerRadius="10%"
+                outerRadius="80%"
+                data={dataRadialBar}
+                startAngle={180}
+                endAngle={0}
+              >
+                <RadialBar minAngle={15} clockWise dataKey="uv" />
+                <Legend verticalAlign="bottom" height={30} />
+              </RadialBarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 6. Area Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Simple Area</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <AreaChart data={dataArea}>
+                <defs>
+                  <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="uv"
+                  stroke="#8884d8"
+                  fillOpacity={1}
+                  fill="url(#colorUv)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 7. Composed Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Composed Chart</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <ComposedChart data={dataComposed}>
+                <CartesianGrid stroke="#f5f5f5" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Area type="monotone" dataKey="amt" fill="#8884d8" stroke="#8884d8" />
+                <Bar dataKey="pv" barSize={20} fill="#413ea0" />
+                <Line type="monotone" dataKey="uv" stroke="#ff7300" />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 8. Scatter Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Scatter Chart</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <ScatterChart>
+                <CartesianGrid />
+                <XAxis dataKey="x" name="stature" />
+                <YAxis dataKey="y" name="weight" />
+                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                <Scatter name="Sample A" data={dataScatter} fill="#8884d8" />
+              </ScatterChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 9. Treemap */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Treemap</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <Treemap data={dataTree} dataKey="size" ratio={4 / 3} stroke="#fff" fill="#8884d8" />
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 10. Funnel Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Funnel Chart</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <FunnelChart>
+                <Tooltip />
+                <Funnel dataKey="value" data={dataFunnel} isAnimationActive>
+                  <LabelList position="right" fill="#000" stroke="none" dataKey="name" />
+                </Funnel>
+              </FunnelChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 11. Sankey */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Sankey</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <Sankey
+                width={200}
+                height={200}
+                data={dataSankey}
+                nodePadding={50}
+                nodeWidth={10}
+              >
+                <Tooltip />
+              </Sankey>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 12. Line Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Line Chart</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <ComposedChart data={dataLine}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 13. Stacked Area Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Stacked Area</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <AreaChart data={dataStackedArea}>
+                <defs>
+                  <linearGradient id="colorUvStack" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                  </linearGradient>
+                  <linearGradient id="colorPvStack" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="uv"
+                  stroke="#8884d8"
+                  fillOpacity={1}
+                  fill="url(#colorUvStack)"
+                  stackId="1"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="pv"
+                  stroke="#82ca9d"
+                  fillOpacity={1}
+                  fill="url(#colorPvStack)"
+                  stackId="1"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 14. Another Stacked Bar Variation */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Stacked Bar Variation</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={dataStackedBar2}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="uv" stackId="a" fill="#8884d8" />
+                <Bar dataKey="pv" stackId="a" fill="#82ca9d" />
+                <Bar dataKey="amt" stackId="a" fill="#ffc658" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 15. Multi-Line Chart */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Multi-Line Chart</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <ComposedChart data={dataBarStack}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+                <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 16. 100% Stacked Bar (Proportional) */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">100% Stacked Bar</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={dataBarStack} stackOffset="expand">
+                <XAxis dataKey="name" />
+                <YAxis tickFormatter={(val) => `${(val * 100).toFixed(0)}%`} />
+                <Tooltip formatter={(val) => `${(val * 100).toFixed(0)}%`} />
+                <Legend />
+                <Bar dataKey="uv" stackId="a" fill="#8884d8" />
+                <Bar dataKey="pv" stackId="a" fill="#82ca9d" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 17. Double Pie (Donut) */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Double Pie (Donut)</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={dataPie}
+                  dataKey="value"
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={30}
+                  outerRadius={50}
+                  fill="#8884d8"
+                >
+                  {dataPie.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Pie
+                  data={dataPie}
+                  dataKey="value"
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  fill="#82ca9d"
+                  label
+                />
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 18. Bar + Line Combo */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Bar + Line Combo</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <ComposedChart data={dataBarStack}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="uv" fill="#8884d8" />
+                <Line dataKey="pv" stroke="#82ca9d" />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 19. Logarithmic Scale? (Simple Variation) */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Log Scale Chart</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <ComposedChart data={dataLine}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis scale="log" domain={[1, "auto"]} />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* 20. Custom Weighted Scatter? (We can reuse scatter with bubble size) */}
+        <Card className="rounded-2xl shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold mb-2">Bubble Scatter</h2>
+            <ResponsiveContainer width="100%" height={200}>
+              <ScatterChart>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" dataKey="x" name="stature" />
+                <YAxis type="number" dataKey="y" name="weight" />
+                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                <Scatter name="Bubbles" data={dataScatter} fill="#82ca9d">
+                  {dataScatter.map((entry, index) => (
+                    <Cell key={`cell-${index}`} r={entry.z / 20} />
+                  ))}
+                </Scatter>
+              </ScatterChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="mt-4">
+        <Button>Export Charts</Button>
+      </div>
+    </div>
+  );
+}
